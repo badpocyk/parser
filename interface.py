@@ -26,7 +26,7 @@ root.resizable(False, False)
 def click_path():
     try:
         print(select_ssylka())
-        file_dialog = filedialog.askopenfilename()
+        file_dialog = filedialog.askdirectory()
         path = file_dialog
         label_path_file['text'] = path
         document = docx.Document(path)
@@ -91,25 +91,32 @@ def click_poluchit():
             #listbox_ssylki.delete(0, END)
         pages = int(amount_pages())
         book_list = get_list(search_request, bi, cap, pages)
+        num = 1
         for book in book_list:
             if format_index() == "ГОСТ":
+                book_gost = str(num) + '. ' + book.gost
                 if int(pdf_file) == 1:
                     if book.pdf:
-                        listbox_ssylki.insert(END, book.gost)
+                        listbox_ssylki.insert(END, book_gost)
                 else:
-                    listbox_ssylki.insert(END, book.gost)
+                    listbox_ssylki.insert(END, book_gost)
+                num += 1
             elif format_index() == "MLA":
+                book_mla = str(num) + '. ' + book.mla
                 if int(pdf_file) == 1:
                     if book.pdf:
-                        listbox_ssylki.insert(END, book.mla)
+                        listbox_ssylki.insert(END, book_mla)
                 else:
-                    listbox_ssylki.insert(END, book.mla)
+                    listbox_ssylki.insert(END, book_mla)
+                num += 1
             elif format_index() == "APA":
+                book_apa = str(num) + '. ' + book.apa
                 if int(pdf_file) == 1:
                     if book.pdf:
-                        listbox_ssylki.insert(END, book.apa)
+                        listbox_ssylki.insert(END, book_apa)
                 else:
-                    listbox_ssylki.insert(END, book.apa)
+                    listbox_ssylki.insert(END, book_apa)
+                num += 1
     except Exception as e:
         string = "Произошла критическая ошибка! Код ошибки: '" + str(e) + "'. Попробуйте снова."
         messagebox.showerror("Ошибка", string)
@@ -118,13 +125,20 @@ def captcha_():
     cap = captcha.get()
     return cap
 
+def onScale(val):
+    v = int(float(val))
+    var_scale.set(v)
+
+def get_scale():
+    var_scale.get()
+
 root.rowconfigure(0, pad=10)
 root.rowconfigure(1, pad=20)
 root.rowconfigure(2, pad=20)
 root.rowconfigure(3, pad=10)
-root.rowconfigure(4, pad=90)
-root.rowconfigure(5, pad=30)
-root.rowconfigure(6, pad=30)
+root.rowconfigure(4, pad=10)
+root.rowconfigure(5, pad=10)
+root.rowconfigure(6, pad=10)
 
 root.columnconfigure(0, pad=50)
 root.columnconfigure(1, pad=10)
@@ -140,6 +154,7 @@ frame_pages = Frame(root)
 frame_ssylki = Frame(root)
 frame_path = Frame(root)
 frame_get = Frame(root)
+frame_scale = Frame(root)
 
 label_name = Label(frame_name, text='Введите название книги:',font='Verdana 13')
 text_name = Text(frame_name, font='Verdana 11',width=30,height=4)
@@ -197,12 +212,18 @@ label_path = Label(frame_path, text='Введите путь к файлу Micro
 button_path = Button(frame_path,width=20, font='Verdana 13', command=click_path, text='Открыть и вставить', background='#ccc')
 label_path_file = Label(frame_path, text='', font='Verdana 11')
 
+label_scale = Label(frame_scale, text='Установите период', font='Verdana 13')
+
+scale = Scale(frame_scale, from_=1500, to=2019, command=onScale, orient=HORIZONTAL, length=300)
+var_scale = IntVar()
+
 frame_name.grid(row=0,column=0)
 frame_browser.grid(row=1,column=0)
 frame_format.grid(row=2,column=0)
 frame_pdf.grid(row=3,column=0)
 frame_pages.grid(row=4, column=0)
-frame_get.grid(row=5, column=0)
+frame_scale.grid(row=5, column=0)
+frame_get.grid(row=6, column=0)
 frame_ssylki.grid(row=0,column=1, rowspan=5, columnspan=6)
 frame_path.grid(row=5, column=4)
 
@@ -226,4 +247,6 @@ button_path.pack()
 label_path_file.pack()
 button_poluchit.pack()
 check_captcha.pack()
+label_scale.pack()
+scale.pack()
 root.mainloop()

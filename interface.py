@@ -71,6 +71,12 @@ def amount_pages():
     amount = entry_pages.get()
     return amount
 
+def dates():
+    date1 = entry_date1.get()
+    date2 = entry_date2.get()
+    dats = [date1, date2]
+    return dats
+    
 # Выбор нужной ссылки
 def select_ssylka():
     ssylka = listbox_ssylki.curselection()
@@ -124,13 +130,6 @@ def click_poluchit():
 def captcha_():
     cap = captcha.get()
     return cap
-
-def onScale(val):
-    v = int(float(val))
-    var_scale.set(v)
-
-def get_scale():
-    var_scale.get()
 
 root.rowconfigure(0, pad=10)
 root.rowconfigure(1, pad=20)
@@ -214,8 +213,8 @@ label_path_file = Label(frame_path, text='', font='Verdana 11')
 
 label_scale = Label(frame_scale, text='Установите период', font='Verdana 13')
 
-scale = Scale(frame_scale, from_=1500, to=2019, command=onScale, orient=HORIZONTAL, length=300)
-var_scale = IntVar()
+entry_date1 = Entry(frame_scale)
+entry_date2 = Entry(frame_scale)
 
 frame_name.grid(row=0,column=0)
 frame_browser.grid(row=1,column=0)
@@ -248,5 +247,6 @@ label_path_file.pack()
 button_poluchit.pack()
 check_captcha.pack()
 label_scale.pack()
-scale.pack()
+entry_date1.pack()
+entry_date2.pack()
 root.mainloop()
